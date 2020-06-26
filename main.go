@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"tableTennis/interfaces"
 )
 
 type User struct {
@@ -22,4 +23,5 @@ func main() {
 
 	// Migrate the schema
 	db.AutoMigrate(&User{})
+	interfaces.HandleRoutes()
 }
