@@ -1,11 +1,21 @@
 package interfaces
 
 import (
-	"net/http"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func HandleRoutes() {
-	http.HandleFunc("/hello_world", helloWorldHandler)
-	http.HandleFunc("/user", userHandler)
-	http.ListenAndServe(":8080", nil)
+	e := echo.New()
+
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Routes
+	e.GET("/hello_world", helloWorldHandler)
+	e.GET("/user", userHandler)
+
+	// Start server
+	e.Logger.Fatal(e.Start(":8080"))
 }
