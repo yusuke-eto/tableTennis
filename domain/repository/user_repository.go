@@ -1,3 +1,10 @@
 package repository
 
-// ここで user の create や update を行う
+import (
+	"tableTennis/domain"
+)
+
+// UserRepository is interface
+type UserRepository interface {
+	Insert(user domain.User) error
+}
