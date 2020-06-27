@@ -1,22 +1,12 @@
 package main
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"tableTennis/infrastructure/persistence"
 	"tableTennis/interfaces/handler"
 	"tableTennis/usecase"
 )
-
-type User struct {
-	gorm.Model
-	Name    string `gorm:"not null"`
-	StyleID uint8  `gorm:"not null"`
-	Sex     uint8  `gorm:"not null"`
-	Email   string `gorm:"type:varchar(100);unique_index;not null"`
-}
 
 func main() {
 	// 依存関係を注入
@@ -26,12 +16,14 @@ func main() {
 
 	e := echo.New()
 
-	// Middleware
-	e.Use(middleware.Logger())
+	// Middlewareの設定 時間、メソッド、uri、ステータスコードは出しておく
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "time: ${time_rfc3339}, method: ${method}, uri: ${uri}, status: ${status}",
+	}))
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.GET("/user", userHandler.HandleUserSignup)
+	e.POST("/user", userHandler.HandleUserSignup)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))

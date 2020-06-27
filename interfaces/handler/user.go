@@ -2,11 +2,11 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"net/http"
+	"tableTennis/domain"
 	"tableTennis/usecase"
 )
 
-// Userに対するHandlerのインターフェース
+// UserHandler Userに対するHandlerのインターフェース
 type UserHandler interface {
 	HandleUserSignup(c echo.Context) error
 }
@@ -15,7 +15,7 @@ type userHandler struct {
 	userUseCase usecase.UserUseCase
 }
 
-// Userデータに関するHandlerを生成
+// NewUserHandler Userデータに関するHandlerを生成
 func NewUserHandler(uu usecase.UserUseCase) UserHandler {
 	return &userHandler{
 		userUseCase: uu,
@@ -23,5 +23,9 @@ func NewUserHandler(uu usecase.UserUseCase) UserHandler {
 }
 
 func (uh userHandler) HandleUserSignup(c echo.Context) error {
-	return c.String(http.StatusOK, "hoge")
+	user := new(domain.User)
+	if err := c.Bind(user); err != nil {
+		return err
+	}
+	return uh.userUseCase.Insert(*user)
 }
