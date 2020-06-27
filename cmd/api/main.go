@@ -4,11 +4,14 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"tableTennis/infrastructure/persistence"
+	"tableTennis/infrastructure/seeds"
 	"tableTennis/interfaces/handler"
 	"tableTennis/usecase"
 )
 
 func main() {
+	// seed data を注入する。必要ない時はコメントアウト
+	seeds.Run()
 	// 依存関係を注入
 	userPersistence := persistence.NewUserPersistence()
 	userUseCase := usecase.NewUserUseCase(userPersistence)
